@@ -20,11 +20,14 @@ print(firewall)
 
 delaycount = 0
 brokethrough = False
+scanners = {}
+for i in prefirewall:
+    scanners[i] = {"pos": 0, "range": prefirewall[i] - 1, "movement": "down"}
 while True:
     # scanners initialization
-    scanners = {}
-    for i in prefirewall:
-        scanners[i] = {"pos": 0, "range": prefirewall[i] - 1, "movement": "down"}
+    for i in scanners:
+        scanners[i]["pos"] = 0
+        scanners[i]["movement"] = "down"
     package = {"pos": -1}
     delay = delaycount
     # print(delaycount)
@@ -37,6 +40,7 @@ while True:
                 break
             if package["pos"] in scanners:
                 if scanners[package["pos"]]["pos"] == 0: #caught
+                    print(package["pos"])
                     delaycount += 1
                     break
         else:
