@@ -33,6 +33,7 @@ for i in range(len(matrix[0])):
 print(x, y)
 
 # moving
+counter = 0
 while True:
     # what is around the pointer
     on = matrix[y][x]
@@ -58,6 +59,7 @@ while True:
                 y -= 1
     elif on == LAST:
         print(on)
+        print(counter + 1)
         exit(0)
     else:
         if on != "|" and on != "-":
@@ -70,4 +72,6 @@ while True:
             x -= 1
         elif dir == "right":
             x += 1
+    counter += 1
     # print(x, y)
+
