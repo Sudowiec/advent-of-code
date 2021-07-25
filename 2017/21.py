@@ -53,7 +53,7 @@ def tileDecode(tile):
     return  decodedtile
 
 
-tile = ".#.###/..####/######/.#.###/....../#.#.#."
+tile = ".#.###.#./..#..####/###.#.###/.#.##.#.#/..#....../#..#.#.#./##..##..#/##..##..#/##..##..#/"
 printTile(tile)
 
 rules23 = {}
@@ -84,9 +84,7 @@ for iter in range(ITERATIONS):
                 down.append(worktile[i])
         numoftiles = int(size / 2) ** 2
         up = sum(up, [])
-        print(up)
         down = sum(down, [])
-        print(down)
         smalltiles = []
         for i in range(numoftiles):
             part1 = []
@@ -97,6 +95,34 @@ for iter in range(ITERATIONS):
                 part2.append(down.pop(0))
             smalltiles.append("".join(part1) + "/" + "".join(part2))
 
+    elif size % 3 == 0:
+        up = []
+        mid = []
+        down = []
+        for i in range(len(worktile)):
+            if i % 3 == 0:
+                up.append(worktile[i])
+            elif i % 3 == 1:
+                mid.append(worktile[i])
+            else:
+                down.append(worktile[i])
+        numoftiles = int(size / 3) ** 2
+        up = sum(up, [])
+        mid = sum(mid, [])
+        down = sum(down, [])
+        smalltiles = []
+        for i in range(numoftiles):
+            part1 = []
+            for j in range(3):
+                part1.append(up.pop(0))
+            part2 = []
+            for j in range(3):
+                part2.append(mid.pop(0))
+            part3 = []
+            for j in range(3):
+                part3.append(down.pop(0))
+            smalltiles.append("".join(part1) + "/" + "".join(part2) + "/" + "".join(part3))
+print(smalltiles)
 
 
 
