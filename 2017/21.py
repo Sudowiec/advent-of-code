@@ -39,7 +39,21 @@ def rotateTile(tile):
         rttile[i] = "".join(rttile[i])
     return "/".join(rttile)
 
-tile = ".#.#/..##/####/.#.#"
+def tileCode(tile):
+    codedtile = []
+    for i in tile:
+        codedtile.append("".join(i))
+    return "/".join(codedtile)
+
+def tileDecode(tile):
+    tile = tile.split("/")
+    decodedtile = []
+    for i in tile:
+        decodedtile.append(list(i))
+    return  decodedtile
+
+
+tile = ".#.###/..####/######/.#.###/....../#.#.#."
 printTile(tile)
 
 rules23 = {}
@@ -57,6 +71,32 @@ while True:
     indx += 1
 
 for iter in range(ITERATIONS):
+    worktile = tileDecode(tile)
     size = checkSize(tile)
+
     if size % 2 == 0:
-        difer = 2
+        up = []
+        down = []
+        for i in range(len(worktile)):
+            if i % 2 == 0:
+                up.append(worktile[i])
+            else:
+                down.append(worktile[i])
+        numoftiles = int(size / 2) ** 2
+        up = sum(up, [])
+        print(up)
+        down = sum(down, [])
+        print(down)
+        smalltiles = []
+        for i in range(numoftiles):
+            part1 = []
+            for j in range(2):
+                part1.append(up.pop(0))
+            part2 = []
+            for j in range(2):
+                part2.append(down.pop(0))
+            smalltiles.append("".join(part1) + "/" + "".join(part2))
+
+
+
+
