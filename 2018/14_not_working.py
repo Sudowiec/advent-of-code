@@ -1,4 +1,4 @@
-inp = 919901
+inp = "919901"
 checkinp = list(map(int, list(str(inp))))
 recipe = [3, 7]
 indone = 0
