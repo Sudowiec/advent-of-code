@@ -1,12 +1,35 @@
-recipes = "919901"
+inp = 919901
+checkinp = list(map(int, list(str(inp))))
+recipe = [3, 7]
+indone = 0
+indtwo = 1
+# print(recipe, indone, indtwo)
 
-score = "37"
-elf_one = 0
-elf_two = 1
-while recipes not in score[-7:]:
-    score += str(int(score[elf_one]) + int(score[elf_two]))
-    elf_one = (elf_one + int(score[elf_one]) + 1) % len(score)
-    elf_two = (elf_two + int(score[elf_two]) + 1) % len(score)
+indx = 0
+while True:
+    valone = recipe[indone]
+    valtwo = recipe[indtwo]
+    mainval = valone + valtwo
 
-print("Part 1:", score[int(recipes):int(recipes)+10])
-print("Part 2:", score.index(recipes))
+    if mainval >= 10:
+        mainval = list(str(mainval))
+        recipe.append(int(mainval[0]))
+        recipe.append(int(mainval[1]))
+    else:
+        recipe.append(mainval)
+
+    indone += (1 + valone)
+    indone %= len(recipe)
+    indtwo += (1 + valtwo)
+    indtwo %= len(recipe)
+
+    if len(recipe) > len(checkinp):
+        cut = recipe[len(recipe) - len(checkinp):len(recipe)]
+        # print(cut)
+        if cut == checkinp:
+            # print(recipe, indone, indtwo)
+            print(len(recipe) - len(checkinp))
+            exit(0)
+    indx += 1
+    # print(recipe, indone, indtwo)
+
