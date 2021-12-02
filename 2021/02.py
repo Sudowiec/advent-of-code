@@ -1,5 +1,6 @@
 hor = 0
 dept = 0
+aim = 0
 
 while True:
     try:
@@ -8,9 +9,11 @@ while True:
         break
 
     if inp[0] == "down":
-        dept += int(inp[1])
+        aim += int(inp[1])
     elif inp[0] == "up":
-        dept -= int(inp[1])
+        aim -= int(inp[1])
     elif inp[0] == "forward":
         hor += int(inp[1])
+        dept += int(inp[1]) * aim
+    print(hor, dept, aim)
 print(hor*dept)
