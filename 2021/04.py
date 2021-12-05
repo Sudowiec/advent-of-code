@@ -35,29 +35,29 @@ while True:
             inp.remove(i)
     board.append(list(map(int, inp)))
 #print(boards)
+winners = []
 
 foundwin = False
 for num in numbers:
     for board in boards:
+        if board in winners:
+            continue
         for i in board:
             if num in i:
                 board[board.index(i)][i.index(num)] = "#"
             if boardcheck(board):
                 winner = board
                 winnum = num
-                foundwin = True
-                break
-        if foundwin:
-            break
-    if foundwin:
-        break
+                winners.append(winner)
 
-sum = 0
-for i in winner:
-    for j in i:
-        if j != "#":
-            sum += j
-print(sum)
-print(winnum)
-print(sum*winnum)
+                sum = 0
+                for i in winner:
+                    for j in i:
+                        if j != "#":
+                            sum += j
+                print(sum)
+                print(winnum)
+                print(sum * winnum)
+
+
 
