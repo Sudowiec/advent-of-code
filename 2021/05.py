@@ -36,10 +36,10 @@ while True:
         for i in range(len(geny)):
             points[str(x1) + "," + str(geny[i])] += 1
             print(str(x1) + "," + str(geny[i]))
-    # else:
-    #     for i in range(len(geny)):
-    #         points[str(genx[i]) + "," + str(geny[i])] += 1
-    #         print(str(genx[i]) + "," + str(geny[i]))
+    else:
+        for i in range(len(geny)):
+            points[str(genx[i]) + "," + str(geny[i])] += 1
+            print(str(genx[i]) + "," + str(geny[i]))
 
 print(points)
 counter = 0
