@@ -1,5 +1,5 @@
 import copy
-ITERATIONS = 5
+ITERATIONS = 18
 # init
 grid = "010001111"
 size = 3
@@ -49,13 +49,13 @@ def comparator(grid, pattern, size):
             return True
 
 # first rebuild
-printgrid(grid, size)
+# printgrid(grid, size)
 for i in rules:
     if comparator(grid, i, size):
         grid = rules[i]
         size += 1
         break
-printgrid(grid, size)
+# printgrid(grid, size)
 
 # main loop
 for index in range(ITERATIONS - 1):
@@ -72,18 +72,18 @@ for index in range(ITERATIONS - 1):
             beg = 2 * i * size
             upper = grid[beg : beg + size]
             downer = grid[beg + size : beg + 2 * size]
-            print(upper)
-            print(downer)
+            # print(upper)
+            # print(downer)
             for j in range(2, size + 1, 2):
                 tiles.append(upper[j - 2 : j] + downer[j - 2: j])
-        print(tiles)
+        # print(tiles)
         for j in range(len(tiles)):
             for i in rules:
                 if comparator(tiles[j], i, 2):
                     tiles[j] = rules[i]
                     break
         size += numofrows
-        print(tiles)
+        # print(tiles)
 
         grid = ""
         for i in range(0, numofrows**2, numofrows):
@@ -104,22 +104,22 @@ for index in range(ITERATIONS - 1):
             upper = grid[beg : beg + size]
             mid = grid[beg + size : beg + 2 * size]
             downer = grid[beg + 2 * size : beg + 3 * size]
-            print(upper)
-            print(mid)
-            print(downer)
+            # print(upper)
+            # print(mid)
+            # print(downer)
             for j in range(3, size + 1, 3):
                 tiles.append(upper[j - 3 : j] + mid[j - 3 : j] + downer[j - 3 : j])
-        print(tiles)
+        # print(tiles)
         for j in range(len(tiles)):
             for i in rules:
                 if comparator(tiles[j], i, 3):
                     tiles[j] = rules[i]
                     break
         size += numofrows
-        print(tiles)
+        # print(tiles)
 
         grid = ""
-        for i in range(0, numofrows**2, 3):
+        for i in range(0, numofrows**2, numofrows):
             upper = ""
             midone = ""
             midtwo = ""
@@ -133,8 +133,9 @@ for index in range(ITERATIONS - 1):
             for j in range(numofrows):
                 downer += tiles[i + j][12:16]
             grid += upper + midone + midtwo + downer
-    print(grid)
-    printgrid(grid, size)
+    # print(grid)
+    # printgrid(grid, size)
+    print(index)
 print(grid.count("1"))
 
 
