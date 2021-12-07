@@ -5,6 +5,7 @@ carrierdir = "u"
 grid = defaultdict(lambda : ".")
 right = {"r" : "d", "d" : "l", "l" : "u", "u" : "r"}
 left = {"r" : "u", "d" : "r", "l" : "d", "u" : "l"}
+reverse = {"r" : "l", "d" : "u", "l" : "r", "u" : "d"}
 
 # init
 counter = 0
@@ -21,19 +22,25 @@ while True:
     y += 1
 
 # main loop
-for time in range(10000):
+for time in range(10000000):
     # turn the carrier
     if grid[carrierpos] == "#":
         carrierdir = right[carrierdir]
-    else:
+    elif grid[carrierpos] == ".":
         carrierdir = left[carrierdir]
+    elif grid[carrierpos] == "F":
+        carrierdir = reverse[carrierdir]
 
-    # infecting / cleaning
-    if grid[carrierpos] == "#":
-        grid[carrierpos] = "."
-    else:
+    # infecting / cleaning / flagging / weakening
+    if grid[carrierpos] == ".":
+        grid[carrierpos] = "W"
+    elif grid[carrierpos] == "W":
         grid[carrierpos] = "#"
         counter += 1
+    elif grid[carrierpos] == "#":
+        grid[carrierpos] = "F"
+    elif grid[carrierpos] == "F":
+        grid[carrierpos] = "."
 
     # move the carrier
     x = int(carrierpos.split(",")[0])
