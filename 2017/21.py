@@ -1,165 +1,140 @@
-import math
+import copy
 ITERATIONS = 5
-
-def checkSize(tile):
-    tp = tile.split("/")
-    return len(tp[0])
-
-def printTile(tile):
-    tp = tile.split("/")
-    for i in tp:
-        print(i)
-
-def flipTile(tile, flip):
-    tp = tile.split("/")
-    sidelen = checkSize(tile)
-    rttile = []
-    for i in range(sidelen):
-        rttile.append(list("-" for j in range(sidelen)))
-    if flip == "lr":
-        for i in range(sidelen):
-            rttile[i] = tp[i][::-1]
-    elif flip == "ud":
-        for i in range(sidelen):
-            rttile[i] = tp[sidelen - i - 1]
-    return "/".join(rttile)
-
-def rotateTile(tile):
-    tp = tile.split("/")
-    sidelen = checkSize(tile)
-    rttile = []
-    for i in range(sidelen):
-        rttile.append(list("-" for j in range(sidelen)))
-    for i in range(sidelen):
-        for j in range(sidelen):
-            rttile[j][sidelen - i - 1] = list(tp[i])[j]
-    for i in range(sidelen):
-        rttile[i] = "".join(rttile[i])
-    return "/".join(rttile)
-
-def tileCode(tile):
-    codedtile = []
-    for i in tile:
-        codedtile.append("".join(i))
-    return "/".join(codedtile)
-
-def tileDecode(tile):
-    tile = tile.split("/")
-    decodedtile = []
-    for i in tile:
-        decodedtile.append(list(i))
-    return  decodedtile
-
-def allPossibilities(tile):
-    possibilities = [tile]
-    possibilities.append(rotateTile(tile))
-    possibilities.append(rotateTile(rotateTile(tile)))
-    possibilities.append(rotateTile(rotateTile(rotateTile(tile))))
-    possibilities.append(flipTile(tile, "lr"))
-    possibilities.append(rotateTile(flipTile(tile, "lr")))
-    possibilities.append(rotateTile(rotateTile(flipTile(tile, "lr"))))
-    possibilities.append(rotateTile(rotateTile(rotateTile(flipTile(tile, "lr")))))
-    return possibilities
-
-tile = ".#./..#/###"
-printTile(tile)
-
-# rules initialization
+# init
+grid = "010001111"
+size = 3
 rules = {}
-indx = 0
 while True:
     try:
         inp = input().split(" => ")
+        one = "".join(inp[0].split("/"))
+        one = one.replace(".", "0")
+        one = one.replace("#", "1")
+        two = "".join(inp[1].split("/"))
+        two = two.replace(".", "0")
+        two = two.replace("#", "1")
+        rules[one] = two
     except EOFError:
         break
-    rules[inp[0]] = inp[1]
-    indx += 1
+
+def printgrid(grid, size):
+    for i in range(size - 1, size**2, size):
+        tp = grid[i-size + 1:i + 1]
+        tp = tp.replace("0", ".")
+        tp = tp.replace("1", "#")
+        print(tp)
+
+
+def comparator(grid, pattern, size):
+    opgrid = copy.deepcopy(grid)
+    for it in range(4):
+        # rotate
+        new = ["" for i in range(size**2)]
+        indx = 0
+        for i in range(size - 1, -1, -1):
+            for j in range(size):
+                new[i + j * size] = opgrid[indx]
+                indx += 1
+        opgrid = "".join(new)
+        if opgrid == pattern:
+            return True
+        # flip
+        indx = 0
+        new = ["" for i in range(size ** 2)]
+        for i in range(size - 1, -1, -1):
+            for j in range(size):
+                new[i * size + j] = opgrid[indx]
+                indx += 1
+        if "".join(new) == pattern:
+            return True
+
+# first rebuild
+printgrid(grid, size)
+for i in rules:
+    if comparator(grid, i, size):
+        grid = rules[i]
+        size += 1
+        break
+printgrid(grid, size)
 
 # main loop
-for iter in range(ITERATIONS):
-    worktile = tileDecode(tile)
-    size = checkSize(tile)
-    division = 0
+for index in range(ITERATIONS - 1):
 
-    # division by 2
     if size % 2 == 0:
         division = 2
-        up = []
-        down = []
-        for i in range(len(worktile)):
-            if i % 2 == 0:
-                up.append(worktile[i])
-            else:
-                down.append(worktile[i])
-        numoftiles = int(size / 2) ** 2
-        up = sum(up, [])
-        down = sum(down, [])
-        smalltiles = []
-        for i in range(numoftiles):
-            part1 = []
-            for j in range(2):
-                part1.append(up.pop(0))
-            part2 = []
-            for j in range(2):
-                part2.append(down.pop(0))
-            smalltiles.append("".join(part1) + "/" + "".join(part2))
-
-    # division by 3
-    elif size % 3 == 0:
-        division = 3
-        up = []
-        mid = []
-        down = []
-        for i in range(len(worktile)):
-            if i % 3 == 0:
-                up.append(worktile[i])
-            elif i % 3 == 1:
-                mid.append(worktile[i])
-            else:
-                down.append(worktile[i])
-        numoftiles = int(size / 3) ** 2
-        up = sum(up, [])
-        mid = sum(mid, [])
-        down = sum(down, [])
-        smalltiles = []
-        for i in range(numoftiles):
-            part1 = []
-            for j in range(3):
-                part1.append(up.pop(0))
-            part2 = []
-            for j in range(3):
-                part2.append(mid.pop(0))
-            part3 = []
-            for j in range(3):
-                part3.append(down.pop(0))
-            smalltiles.append("".join(part1) + "/" + "".join(part2) + "/" + "".join(part3))
-
-    # changing tiles by the rules
-    newtiles = []
-    for subject in smalltiles:
-        pos = allPossibilities(subject)
-        for i in pos:
-            if i in rules:
-                newtiles.append(rules[i])
-                break
-    newtiles = "/".join(newtiles)
-    if iter == 0:
-        tile = newtiles
     else:
-        newtiles = tileDecode(newtiles)
-        switchtiles = []
-        for i in range(len(newtiles[0]) * int(math.sqrt(numoftiles))):
-            idk = []
-            for j in range(int(math.sqrt(numoftiles))):
-                idk += newtiles[i + j * (division + 1)]
-            switchtiles.append(idk)
-        switchtiles = tileCode(switchtiles)
-        tile = switchtiles
-    print()
-    printTile(tile)
+        division = 3
+    numofrows = size // division
+    tiles = []
 
-    count = 0
-    for i in tile:
-        if i == "#":
-            count += 1
-    print(count)
+    if division == 2:
+        for i in range(numofrows):
+            beg = 2 * i * size
+            upper = grid[beg : beg + size]
+            downer = grid[beg + size : beg + 2 * size]
+            print(upper)
+            print(downer)
+            for j in range(2, size + 1, 2):
+                tiles.append(upper[j - 2 : j] + downer[j - 2: j])
+        print(tiles)
+        for j in range(len(tiles)):
+            for i in rules:
+                if comparator(tiles[j], i, 2):
+                    tiles[j] = rules[i]
+                    break
+        size += numofrows
+        print(tiles)
+
+        grid = ""
+        for i in range(0, numofrows**2, numofrows):
+            upper = ""
+            mid = ""
+            downer = ""
+            for j in range(numofrows):
+                upper += tiles[i + j][0:3]
+            for j in range(numofrows):
+                mid += tiles[i + j][3:6]
+            for j in range(numofrows):
+                downer += tiles[i + j][6:9]
+            grid += upper + mid + downer
+
+    if division == 3:
+        for i in range(numofrows):
+            beg = 3 * i * size
+            upper = grid[beg : beg + size]
+            mid = grid[beg + size : beg + 2 * size]
+            downer = grid[beg + 2 * size : beg + 3 * size]
+            print(upper)
+            print(mid)
+            print(downer)
+            for j in range(3, size + 1, 3):
+                tiles.append(upper[j - 3 : j] + mid[j - 3 : j] + downer[j - 3 : j])
+        print(tiles)
+        for j in range(len(tiles)):
+            for i in rules:
+                if comparator(tiles[j], i, 3):
+                    tiles[j] = rules[i]
+                    break
+        size += numofrows
+        print(tiles)
+
+        grid = ""
+        for i in range(0, numofrows**2, 3):
+            upper = ""
+            midone = ""
+            midtwo = ""
+            downer = ""
+            for j in range(numofrows):
+                upper += tiles[i + j][0:4]
+            for j in range(numofrows):
+                midone += tiles[i + j][4:8]
+            for j in range(numofrows):
+                midtwo += tiles[i + j][8:12]
+            for j in range(numofrows):
+                downer += tiles[i + j][12:16]
+            grid += upper + midone + midtwo + downer
+    print(grid)
+    printgrid(grid, size)
+print(grid.count("1"))
+
+
