@@ -13,7 +13,8 @@ octopuses.append(["#" for i in range(12)])
 print(octopuses)
 
 flashcount = 0
-for index in range(ITER):
+index = 0
+while True:
     queue = []
     for y in range(1, SIZE + 1):
         for x in range(1, SIZE + 1):
@@ -38,11 +39,18 @@ for index in range(ITER):
                 [y, x - 1],
                 [y - 1, x - 1]
             ])
+    all = True
     for y in range(1, SIZE + 1):
         for x in range(1, SIZE + 1):
             if octopuses[y][x] == 10:
                 octopuses[y][x] = 0
+            else:
+                all = False
+    if all:
+        break
     for i in octopuses:
         print("".join(map(str, i)))
     print()
-print(flashcount)
+    index += 1
+print(index + 1)
+
