@@ -7,21 +7,18 @@ while True:
         break
 
 index = 0
+mulCount = 0
+
+def getVal(ref):
+    return registers[ref] if ref in registers.keys() else int(ref)
+
 while True:
     try:
         ins = instructions[index][0]
         valone = instructions[index][1]
-        valtwo = instructions[index][2]
+        valtwo = getVal(instructions[index][2])
     except IndexError:
         break
-
-    if valtwo in list(registers.keys()):
-        valtwo = int(registers[valtwo])
-    else:
-        valtwo = int(valtwo)
-
-    if valone not in list(registers.keys()):
-        valone = 1
 
     if ins == "set":
         registers[valone] = valtwo
@@ -29,10 +26,7 @@ while True:
         registers[valone] -= valtwo
     elif ins == "mul":
         registers[valone] *= valtwo
-    elif ins == "jnz":
-        if valone != 0:
-            index += valtwo - 1
-        continue
-    print(index)
-    print(registers)
-    index += 1
+        mulCount += 1
+    
+    index += valtwo if ins == 'jnz' and getVal(valone) != 0 else 1
+print(mulCount)
