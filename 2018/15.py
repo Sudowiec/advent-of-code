@@ -37,6 +37,32 @@ def getInRange(currentNpc = None):
     [inRangeSet.append(i) for i in inRange if i != "DELETEME" and i not in inRangeSet]
     return inRangeSet
 
+# get reachable tiles function
+def getReachable(currentNpc):
+    startX = currentNpc["X"]
+    startY = currentNpc["Y"]
+    beenTo = []
+    reachable = []
+
+    def rec(y, x):
+        beenTo.append([y, x])
+        if cave[y][x - 1] == "." and [y, x - 1] not in beenTo: # left
+            reachable.append([y, x - 1])
+            rec(y, x - 1)
+        if cave[y][x + 1] == "." and [y, x + 1] not in beenTo: # right
+            reachable.append([y, x + 1])
+            rec(y, x + 1)
+        if cave[y - 1][x] == "." and [y - 1, x] not in beenTo: # up
+            reachable.append([y - 1, x])
+            rec(y - 1, x)
+        if cave[y + 1][x] == "." and [y + 1, x] not in beenTo: # down
+            reachable.append([y + 1, x])
+            rec(y + 1, x)
+        return
+
+    rec(startY, startX)
+    return reachable
+
 # main loop
 while True:
     for roundY in range(CAVEH):
