@@ -1,5 +1,6 @@
 CAVEH = 0
 CAVEW = 0
+INF = 9999999
 
 cave = []
 npcs = []
@@ -39,29 +40,59 @@ def getInRange(currentNpc = None):
 
 # get reachable tiles function
 def getReachable(currentNpc):
-    startX = currentNpc["X"]
-    startY = currentNpc["Y"]
+    startCoords = [currentNpc["Y"], currentNpc["X"]]
     beenTo = []
     reachable = []
+    queue = []
 
-    def rec(y, x):
+    def rec(coords, dist):
+        y = coords[0]
+        x = coords[1]
         beenTo.append([y, x])
+        print(queue)
         if cave[y][x - 1] == "." and [y, x - 1] not in beenTo: # left
-            reachable.append([y, x - 1])
-            rec(y, x - 1)
+            elemd = [y, x - 1, dist]
+            elem = [y, x - 1]
+            reachable.append(elemd)
+            if elem not in beenTo and elem not in queue:
+                queue.append(elem)
+            queue.append([y, x - 1])
         if cave[y][x + 1] == "." and [y, x + 1] not in beenTo: # right
-            reachable.append([y, x + 1])
-            rec(y, x + 1)
+            elemd = [y, x + 1, dist]
+            elem = [y, x + 1]
+            reachable.append(elemd)
+            if elem not in beenTo and elem not in queue:
+                queue.append(elem)
         if cave[y - 1][x] == "." and [y - 1, x] not in beenTo: # up
-            reachable.append([y - 1, x])
-            rec(y - 1, x)
+            elemd = [y - 1, x, dist]
+            elem = [y - 1, x]
+            reachable.append(elemd)
+            if elem not in beenTo and elem not in queue:
+                queue.append(elem)
         if cave[y + 1][x] == "." and [y + 1, x] not in beenTo: # down
-            reachable.append([y + 1, x])
-            rec(y + 1, x)
+            elemd = [y + 1, x, dist]
+            elem = [y + 1, x]
+            reachable.append(elemd)
+            if elem not in beenTo and elem not in queue:
+                queue.append(elem)
+        if len(queue) > 0:
+            rec(queue.pop(0), dist + 1)
         return
 
-    rec(startY, startX)
+    rec(startCoords, 1)
     return reachable
+
+print(getReachable({"Y" : 3, "X" : 2}))
+# get nearest tiles from a tileset
+def getNearest(currentNpc, tileset):
+    queue = []
+    def bfs(coords, dist):
+        y = coords[0]
+        x = coords[1]
+        
+    
+
+
 
 # main loop
 while True:
