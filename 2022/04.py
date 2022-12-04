@@ -6,5 +6,11 @@ while True:
         break
     first = list(map(int, inp[0].split("-")))
     second = list(map(int, inp[1].split("-")))
-    s += 1 if (first[0] >= second[0] and first[1] <= second[1]) or (second[0] >= first[0] and second[1] <= first[1]) else 0
+    arr = []
+    for i in range(first[0], first[1] + 1):
+        arr.append(i)
+    for i in range(second[0], second[1] + 1):
+        arr.append(i)
+    setArr = set(arr)
+    s += 1 if len(setArr) < len(arr) else 0
 print(s)
