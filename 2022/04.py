@@ -4,13 +4,8 @@ while True:
         inp = input().split(",")
     except EOFError:
         break
-    first = list(map(int, inp[0].split("-")))
-    second = list(map(int, inp[1].split("-")))
     arr = []
-    for i in range(first[0], first[1] + 1):
-        arr.append(i)
-    for i in range(second[0], second[1] + 1):
-        arr.append(i)
-    setArr = set(arr)
-    s += 1 if len(setArr) < len(arr) else 0
+    arr.extend(range(int(inp[0].split("-")[0]), int(inp[0].split("-")[1]) + 1))
+    arr.extend(range(int(inp[1].split("-")[0]), int(inp[1].split("-")[1]) + 1))
+    s += 1 if len(set(arr)) < len(arr) else 0
 print(s)
