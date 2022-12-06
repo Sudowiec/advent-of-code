@@ -1,5 +1,5 @@
 inp = input()
-for i in range(3, len(inp)):
-    if len(set(inp[i - 4 : i])) == 4:
+for i in range(13, len(inp)):
+    if len(set(inp[i - 14 : i])) == 14:
         print(i)
         break
