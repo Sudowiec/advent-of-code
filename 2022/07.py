@@ -33,4 +33,12 @@ s = 0
 for i in dirweights:
     if dirweights[i] <= 100000:
         s += dirweights[i]
-print(s)
+print("Part 1:", s)
+
+todel = 30000000 - (70000000 - dirweights["~"])
+print(todel)
+num = 999999999
+for i in dirweights:
+    if dirweights[i] < num and dirweights[i] > todel:
+        num = dirweights[i]
+print("Part 2:", num)
