@@ -1,7 +1,10 @@
-def printgrid(grid):
-    for i in grid:
-        print("".join(list(map(str, i))))
-    print("")
+DOPRINTGRID = False
+def printgrid(grid, label = ""):
+    if DOPRINTGRID:
+        print(label)
+        for i in grid:
+            print("".join(list(map(str, i))))
+        print("")
 
 grid = []
 inp = open("2022/08.txt", "r")
@@ -12,6 +15,7 @@ while True:
     grid.append(line)
 size = len(grid)
 
+# PART 1
 # right
 rgrid = [["" for j in range(size)] for i in range(size)]
 for i in range(size):
@@ -23,8 +27,7 @@ for i in range(size):
             rgrid[i][j] = "0"
         else:
             rgrid[i][j] = "O"
-print("Right:")
-printgrid(rgrid)
+printgrid(rgrid, "Right:")
 
 # left
 lgrid = [["" for j in range(size)] for i in range(size)]
@@ -37,8 +40,7 @@ for i in range(size-1, -1, -1):
             lgrid[i][j] = "0"
         else:
             lgrid[i][j] = "O"
-print("Left:")
-printgrid(lgrid)
+printgrid(lgrid, "Left:")
 
 # top
 tgrid = [["" for j in range(size)] for i in range(size)]
@@ -51,8 +53,7 @@ for i in range(size):
             tgrid[j][i] = "0"
         else:
             tgrid[j][i] = "O"
-print("Top:")
-printgrid(tgrid)
+printgrid(tgrid, "Top:")
 
 # bottom
 bgrid = [["" for j in range(size)] for i in range(size)]
@@ -65,8 +66,7 @@ for i in range(size-1, -1, -1):
             bgrid[j][i] = "0"
         else:
             bgrid[j][i] = "O"
-print("Bottom:")
-printgrid(bgrid)
+printgrid(bgrid, "Bottom:")
 
 # main
 s = 0
@@ -76,6 +76,71 @@ for i in range(size):
         if rgrid[i][j] == '0' or lgrid[i][j] == '0' or tgrid[i][j] == '0' or bgrid[i][j] == '0':
             mgrid[i][j] = '0'
             s += 1
-print("Whole:")
-printgrid(mgrid)
+printgrid(mgrid, "Whole:")
 print("Visible trees:", s)
+
+# PART 2
+size += 2
+grid.insert(0, ["X" for i in range(size)])
+grid.append(["X" for i in range(size)])
+for i in range(1, size - 1):
+    grid[i].insert(0, "X")
+    grid[i].append("X")
+printgrid(grid)
+
+scores = []
+for y in range(1, size - 1):
+    for x in range(1, size - 1):
+        height = grid[y][x]
+        
+        # top
+        i = 0
+        t = 0
+        while True:
+            i += 1
+            curheight = grid[y - i][x]
+            if curheight == "X":
+                break
+            t += 1
+            if curheight >= height:
+                break
+
+        # bottom
+        i = 0
+        b = 0
+        while True:
+            i += 1
+            curheight = grid[y + i][x]
+            if curheight == "X":
+                break
+            b += 1
+            if curheight >= height:
+                break
+
+        # right
+        i = 0
+        r = 0
+        while True:
+            i += 1
+            curheight = grid[y][x + i]
+            if curheight == "X":
+                break
+            r += 1
+            if curheight >= height:
+                break
+
+        # left
+        i = 0
+        l = 0
+        while True:
+            i += 1
+            curheight = grid[y][x - i]
+            if curheight == "X":
+                break
+            l += 1
+            if curheight >= height:
+                break
+
+        # count
+        scores.append(l * r * t * b)
+print("Highest score:", max(scores))
