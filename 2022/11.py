@@ -1,4 +1,4 @@
-NUMOFROUNDS = 20
+NUMOFROUNDS = 10000
 monkeys = []
 
 f = open("2022/11.txt")
@@ -32,13 +32,18 @@ while True:
     cycle += 1
 
 numsOfInspections = [0 for i in range(len(monkeys))]
+commonMul = 1
+for i in monkeys:
+    commonMul *= i["test"]
 for r in range(NUMOFROUNDS):
+    print("ROUND:", r)
     for monkey in monkeys:
         for i in range(len(monkey["items"])):     
             item = monkey["items"].pop(0)
+            # print("ITEM", item)
             numsOfInspections[monkey["num"]] += 1
             op = monkey["operation"].replace("old", str(item))
-            item = eval(op) // 3
+            item = eval(op) % commonMul
             if not item % monkey["test"]:
                 monkeys[monkey["true"]]["items"].append(item)
             else:
