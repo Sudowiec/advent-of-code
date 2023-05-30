@@ -72,19 +72,28 @@ def takeOf(q):
     q.remove(minCoord)
     return minCoord
 
-d = {}
-prevs = {}
-for v in graph:
-    d[v] = INF
-    prevs[v] = "#,#"
-d[start] = 0
-q = []
-for v in graph:
-    q.append(v)
-while len(q) > 0:
-    u = takeOf(q)
-    for v in graph[u]:
-        if d[v] > d[u] + 1:
-            d[v] = d[u] + 1
-            prevs[v] = u
-print("Shortest path:", d[finish])
+ts = INF
+indx = 1
+for start in graph:
+    print(indx)
+    indx += 1
+    if highmap[decoord(start)[1]][decoord(start)[0]] != "a":
+        continue
+    d = {}
+    prevs = {}
+    for v in graph:
+        d[v] = INF
+        prevs[v] = "#,#"
+    d[start] = 0
+    q = []
+    for v in graph:
+        q.append(v)
+    while len(q) > 0:
+        u = takeOf(q)
+        for v in graph[u]:
+            if d[v] > d[u] + 1:
+                d[v] = d[u] + 1
+                prevs[v] = u
+    if d[finish] < ts:
+        ts = d[finish]
+print("Shortest path:", ts)
