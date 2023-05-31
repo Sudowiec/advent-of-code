@@ -1,6 +1,6 @@
+import copy
 f = open("2022/13.txt")
-lefts = []
-rights = []
+flist = []
 
 global a
 global b
@@ -40,17 +40,20 @@ while True:
     if l == "":
         break
     l = l.strip()
-    lefts.append(analyzeString(l, 0))
-    rights.append(analyzeString(f.readline().strip(), 0))
+    flist.append(analyzeString(l, 0))
+    flist.append(analyzeString(f.readline().strip(), 0))
     f.readline()
-size = len(rights)
-
+flist.append([[2]])
+flist.append([[6]])
+size = len(flist)
 def convToArr(num):
     tmpl = []
     tmpl.append(num)
     return tmpl
 
-def compareArrays(arr1, arr2):
+def compareArrays(inp1, inp2):
+    arr1 = copy.deepcopy(inp1)
+    arr2 = copy.deepcopy(inp2)
     s = max([len(arr1), len(arr2)])
     i = 0
     while i < s:
@@ -87,10 +90,13 @@ def compareArrays(arr1, arr2):
         i += 1
     return 1
 
-s = 0
-for el in range(size):
-    right = rights[el]
-    left = lefts[el]
-    if analyzeArrays(left, right) == 2:
-        s += el + 1
-print(s)
+print()
+def sortlist(arr):
+    for n in range(len(arr)-1, 0, -1):
+        for i in range(n):
+            if compareArrays(arr[i], arr[i + 1]) == 0:
+                tmp = arr[i]
+                arr[i] = arr[i + 1]
+                arr[i + 1] = tmp
+sortlist(flist)
+print("Decoder key", (flist.index([[6]]) + 1) * (flist.index([[2]]) + 1))
