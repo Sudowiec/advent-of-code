@@ -1,6 +1,6 @@
 import os
 import time
-FANCYDISPLAY = True
+FANCYDISPLAY = False
 f = open("2022/14.txt")
 lowestx = 9999999
 highestx = 0
@@ -24,8 +24,8 @@ while True:
         if y > highesty:
             highesty = y
     paths.append(inp)
-lowestx -= 50
-highestx += 50
+lowestx -= 200
+highestx += 200
 cave = [["." for j in range(highestx - lowestx + 1)] for i in range(highesty + 4)]
 
 def checkdir(a, b):
@@ -80,9 +80,9 @@ while True:
             time.sleep(0.01)
         if tmp == "rests":
             sandCount += 1
+            if sx == 500 - lowestx and sy == 0:
+                print(sandCount)
+                exit()
             break
         sx = tmp[0]
         sy = tmp[1]
-        if sy > highesty:
-            print(sandCount)
-            exit()
