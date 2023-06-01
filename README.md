@@ -1,3 +1,3 @@
 # advent of code
-_TG 2021_
-adventofcode.com
+
+Mostly python implementations of [adventofcode.com](https://www.adventofcode.com) tasks.
