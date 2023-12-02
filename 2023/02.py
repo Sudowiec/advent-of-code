@@ -11,16 +11,18 @@ s = 0
 for i in range(LENGTH):
     gId = i + 1
     confs = f.readline().strip().split(": ")[1].split("; ")
-    poss = True
+    maind = {"red" : 0, "green" : 0, "blue" : 0}
     for j in range(len(confs)):
         d = {"red" : 0, "green" : 0, "blue" : 0}
         colors = confs[j].split(", ")     
         for k in colors:
             d[k.split(" ")[1]] += int(k.split(" ")[0])
-        if d["red"] > RED or d["green"] > GREEN or d["blue"] > BLUE:
-            poss = False
-            break
-    print(confs)
-    if poss:
-        s += gId
+        for k in d:
+            if d[k] > maind[k]:
+                maind[k] = d[k]
+    print(maind)
+    p = 1
+    for j in maind:
+        p *= maind[j]
+    s += p
 print(s)
