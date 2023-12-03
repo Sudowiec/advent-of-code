@@ -24,7 +24,6 @@ def getNumber(turn, x, y):
         while matrix[y][px] != ".":
             num += matrix[y][px]
             px += 1
-    print(num)
     return int(num)
 
 f = open(os.path.join(sys.path[0], "03.txt"), "r")
@@ -40,27 +39,41 @@ for i in matrix:
 s = 0
 for y in range(len(matrix)):
     for x in range(len(matrix[0])):
-        if matrix[y][x] == "." or matrix[y][x] in NUMS:
+        if matrix[y][x] != "*":
             continue
         
+        ratio = 1
+        amountOfNums = 0
+
         if matrix[y][x - 1] in NUMS: # LEFT
-            s += getNumber("left", x - 1, y)
+            ratio *= getNumber("left", x - 1, y)
+            amountOfNums += 1
         if matrix[y][x + 1] in NUMS: # RIGHT
-            s += getNumber("right", x + 1, y)
+            ratio *= getNumber("right", x + 1, y)
+            amountOfNums += 1
 
         if matrix[y - 1][x] in NUMS: # UP
-            s += getNumber("both", x, y - 1)
+            ratio *= getNumber("both", x, y - 1)
+            amountOfNums += 1
         else:
             if matrix[y - 1][x - 1] in NUMS: # UP LEFT
-                s += getNumber("left", x - 1, y - 1)
+                ratio *= getNumber("left", x - 1, y - 1)
+                amountOfNums += 1
             if matrix[y - 1][x + 1] in NUMS: # UP RIGHT
-                s += getNumber("right", x + 1, y - 1)
+                ratio *= getNumber("right", x + 1, y - 1)
+                amountOfNums += 1
         
         if matrix[y + 1][x] in NUMS: # DOWN
-            s += getNumber("both", x, y + 1)
+            ratio *= getNumber("both", x, y + 1)
+            amountOfNums += 1
         else:
             if matrix[y + 1][x - 1] in NUMS: # DOWN LEFT
-                s += getNumber("left", x - 1, y + 1)
+                ratio *= getNumber("left", x - 1, y + 1)
+                amountOfNums += 1
             if matrix[y + 1][x + 1] in NUMS: # DOWN RIGHT
-                s += getNumber("right", x + 1, y + 1)
+                ratio *= getNumber("right", x + 1, y + 1)
+                amountOfNums += 1
+        
+        if amountOfNums == 2:
+            s += ratio
 print(s)                
