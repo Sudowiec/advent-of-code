@@ -11,9 +11,8 @@ print(seedranges)
 for i in range(0, len(seedranges), 2):
     for j in range(seedranges[i], seedranges[i] + seedranges[i + 1]):
         seeds.append(j)
-print(seeds)
-exit()
 f.readline()
+print(seeds)
 
 maps = {}
 mapnames = []
@@ -42,10 +41,7 @@ for s in seeds:
                 break
         seeddict[m.split("-")[2]] = curval
     seedneeds.append(seeddict)
-print(seedneeds)
 
 lowest = 999999999
 for i in seedneeds:
-    if i["location"] < lowest:
-        lowest = i["location"]
-print(lowest)
+    print(i["seed"], i["location"])
