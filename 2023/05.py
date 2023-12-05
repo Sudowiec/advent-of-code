@@ -8,28 +8,32 @@ NUMOFMAPS = 7
 seeds = list(map(int, f.readline().strip()[7:].split(" ")))
 f.readline()
 
-maps = defaultdict(lambda : {})
+maps = {}
 mapnames = []
-for m in range(NUMOFMAPS):
-    curmap = f.readline().strip()[:-5]
-    mapnames.append(curmap)
+for i in range(NUMOFMAPS):
+    ranges = []
+    mname = f.readline().strip()[:-5]
+    mapnames.append(mname)
     l = f.readline().strip()
     while l != "":
         l = list(map(int, l.split(" ")))
-        for i in range(l[2]):
-            maps[curmap][l[1] + i] = l[0] + i
+        beg = [l[1], l[0]]
+        end = [l[1] + l[2] - 1, l[0] + l[2] - 1]
+        ranges.append([beg, end])
         l = f.readline().strip()
+    maps[mname] = ranges
 
 seedneeds = []
-for seed in seeds:
-    seeddict = {"seed" : seed}
-    curval = seed
-    curname = "seed"
+for s in seeds:
+    seeddict = {"seed" : s}
+    curval = s
     for m in mapnames:
-        if curval in maps[m].keys():
-            curval = maps[m][curval]
-        curname = m.split("-")[2]
-        seeddict[curname] = curval
+        for r in maps[m]:
+            if curval >= r[0][0] and curval <= r[1][0]:
+                diff = curval - r[0][0]
+                curval = r[0][1] + diff
+                break
+        seeddict[m.split("-")[2]] = curval
     seedneeds.append(seeddict)
 print(seedneeds)
 
