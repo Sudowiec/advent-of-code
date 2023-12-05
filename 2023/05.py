@@ -5,7 +5,14 @@ f = open(os.path.join(sys.path[0], "05.txt"), "r")
 
 NUMOFMAPS = 7
 
-seeds = list(map(int, f.readline().strip()[7:].split(" ")))
+seeds = []
+seedranges = list(map(int, f.readline().strip()[7:].split(" ")))
+print(seedranges)
+for i in range(0, len(seedranges), 2):
+    for j in range(seedranges[i], seedranges[i] + seedranges[i + 1]):
+        seeds.append(j)
+print(seeds)
+exit()
 f.readline()
 
 maps = {}
