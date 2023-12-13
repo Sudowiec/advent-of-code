@@ -1,6 +1,7 @@
 import os, sys
 
 LENGTH = 140
+EMPTYSIZE = 1000000
 
 def turnMatrix(matrix):
     foo = []
@@ -14,21 +15,21 @@ def turnMatrix(matrix):
 space = []
 f = open(os.path.join(sys.path[0], "11.txt"), "r")
 
+emptyRows = []
 for i in range(LENGTH):
     line = list(f.readline().strip())
     if list(set(line)) == ["."]:
-        space.append(line)
+        emptyRows.append(i)
     space.append(line)
 
 turned = turnMatrix(space)
-toDub = []
+emptyCols = []
 for i in range(len(turned)):
     if list(set(turned[i])) == ["."]:
-        toDub.append(i)
-
-for i in range(len(toDub)):
-    turned.insert(toDub[i] + i, ["." for i in range(len(turned[0]))])
+        emptyCols.append(i)
 space = turnMatrix(turned)
+
+print(emptyCols, emptyRows)
 
 
 galaxies = []
@@ -41,6 +42,18 @@ for i in galaxies:
     for j in galaxies:
         if i == j or (i + "|" + j) in paths or (j + "|" + i) in paths:
             continue
-        dist = abs(int(i.split(",")[0]) - int(j.split(",")[0])) + abs(int(i.split(",")[1]) - int(j.split(",")[1]))
+        ax = int(i.split(",")[0])
+        bx = int(j.split(",")[0])
+        ay = int(i.split(",")[1])
+        by = int(j.split(",")[1])
+
+        toMul = 0
+        for r in emptyRows:
+            if (r > ay and r < by) or (r > by and r < ay):
+                toMul += 1
+        for c in emptyCols:
+            if (c > ax and c < bx) or (c > bx and c < ax):
+                toMul += 1
+        dist = abs(ax - bx) + abs(ay - by) + toMul * (EMPTYSIZE - 1)
         paths[i + "|" + j] = dist
 print(sum(paths.values()))
