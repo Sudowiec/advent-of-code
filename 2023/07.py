@@ -2,7 +2,7 @@ import os, sys
 from collections import defaultdict
 
 f = open(os.path.join(sys.path[0], "07.txt"), "r")
-LENGTH = 5
+LENGTH = 1000
 HANDSIZE = 5
 HIERARCHY = "J23456789TQKA"
 
@@ -14,26 +14,50 @@ for i in range(LENGTH):
     hands.append(inp[0])
 
 def getHandName(hand):
-    for option in hand:
-        s = defaultdict(lambda : 0)
-        res = 0
-        for i in hand:
-            s[i] += 1
+    s = defaultdict(lambda : 0)
+    for i in hand:
+        s[i] += 1
+    if s["J"] == 0:
+        if len(s) - 1 == 5:
+            return 1
+        elif len(s) - 1 == 4:
+            return 2
+        elif len(s) - 1 == 3:
+            if 3 not in s.values():
+                return 3
+            return 4
+        elif len(s) - 1 == 2:
+            if 4 not in s.values():
+                return 5
+            return 6
+        elif len(s) - 1 == 1:
+            return 7
+    elif s["J"] == 1:
         if len(s) == 5:
-            res = 1
+            return 2
         elif len(s) == 4:
-            res = 2
+            return 4
         elif len(s) == 3:
             if 3 not in s.values():
-                res = 3
-            res = 4
+                return 5
+            return 6
         elif len(s) == 2:
-            if 4 not in s.values():
-                res = 5
-            res = 6
-        elif len(s) == 1:
-            res = 7
-    return res
+            return 7
+    elif s["J"] == 2:
+        if len(s) == 4:
+            return 4
+        elif len(s) == 3:
+            return 6
+        elif len(s) == 2:
+            return 7
+    elif s["J"] == 3:
+        if len(s) == 3:
+            return 6
+        elif len(s) == 2:
+            return 7
+    else:
+        return 7
+
 
 def compare(handOne, handTwo):
     if getHandName(handOne) == getHandName(handTwo):
