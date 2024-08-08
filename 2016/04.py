@@ -1,5 +1,6 @@
 from collections import defaultdict
 FLENGTH = 1066
+ALPHABET = "abcdefghijklmnopqrstuvwxyz"
 
 sum = 0
 f = open("04.txt")
@@ -27,5 +28,9 @@ for i in range(FLENGTH):
     fin = "".join(fin[:5])
     
     if fin == checksum:
-        sum += secId
-print(sum)
+        sentence = list(" ".join(l[:-1]))
+        for letter_ind in range(len(sentence)):
+            if sentence[letter_ind] == " ":
+                continue
+            sentence[letter_ind] = ALPHABET[(ALPHABET.index(sentence[letter_ind]) + secId) % 26]
+        print(secId, "".join(sentence))
