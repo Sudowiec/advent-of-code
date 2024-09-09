@@ -80,7 +80,12 @@ def dijkstra(source):
                 prev[n] = u
     return dist, prev
 
-graph_analysis = dijkstra(REACH)
+graph_analysis = dijkstra("1,1")
 distances = graph_analysis[0]
 previouses = graph_analysis[1]
-print(distances["1,1"])
+
+count = 0
+for i in distances:
+    if distances[i] <= 50:
+        count += 1
+print(count)
