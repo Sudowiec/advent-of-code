@@ -1,12 +1,21 @@
 import hashlib
 
-salt = "ngcjuoqr"
+PART = 2
+KEY_STRETCH = 2016
+SALT = "ngcjuoqr"
+
+def hash_string(s, stretch_val):
+    md5 = hashlib.md5(s.encode()).hexdigest()
+    while stretch_val > 0:
+        md5 = hashlib.md5(md5.encode()).hexdigest()
+        stretch_val -= 1
+    return md5
 
 otps = 0
 potentials = {}
 index = 0
 while True:
-    hash = hashlib.md5(f"{salt}{index}".encode()).hexdigest()
+    hash = hash_string(f"{SALT}{index}", KEY_STRETCH)
     for i in range(len(hash) - 4):
         fragment = hash[i : i + 5]
         if len(set(fragment)) == 1:
