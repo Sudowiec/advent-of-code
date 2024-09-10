@@ -23,12 +23,12 @@ def print_instructions(index, cpu, last = False):
     to_print = ""
     for i in range(len(instructions)):
         if i == index:
-            to_print += f"{COL_GREEN}> {" ".join(list(map(str, instructions[i])))}{COL_RESET}\n"
+            to_print += f"{COL_GREEN}> {' '.join(list(map(str, instructions[i])))}{COL_RESET}\n"
         else:
-            to_print += f"  {" ".join(list(map(str, instructions[i])))}\n"
+            to_print += f"  {' '.join(list(map(str, instructions[i])))}\n"
     to_print += f"\n"
     for i in cpu:
-        to_print += f"  [{i}]: {cpu[i]}{10 * " "}\n"
+        to_print += f"  [{i}]: {cpu[i]}{10 * ' '}\n"
     if not last:
         to_print += f"{MOVE_UP * (len(instructions) + 5)}"
     sys.stdout.write(to_print)
