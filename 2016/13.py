@@ -1,11 +1,22 @@
-import sys, os
+import sys, os, time
 from collections import defaultdict
 
 FAV_NUMBER = 1364
 REACH = "31,39"
-EMPTY_SYMBOL = "."
-WALL_SYMBOL = "#"
 WALL_LENGTH = 50
+
+COLOR_DARK_WHITE =  "\33[32m"
+COLOR_RESET = "\33[0m"
+COLOR_RED = "\33[31m"
+COLOR_BLACK = "\33[30m"
+
+EMPTY_SYMBOL = " "
+WALL_SYMBOL = f"{COLOR_DARK_WHITE}#{COLOR_RESET}"
+PLAYER_SYMBOL = f"{COLOR_BLACK}O{COLOR_RESET}"
+START_SYMBOL = "F"
+FINISH_SYMBOL = f"{COLOR_RED}X{COLOR_RESET}"
+PATH_SYMBOL = "."
+
 
 LINE_UP = "\033[F"
 
@@ -80,12 +91,22 @@ def dijkstra(source):
                 prev[n] = u
     return dist, prev
 
-graph_analysis = dijkstra("1,1")
+graph_analysis = dijkstra(REACH)
 distances = graph_analysis[0]
 previouses = graph_analysis[1]
 
-count = 0
-for i in distances:
-    if distances[i] <= 50:
-        count += 1
-print(count)
+matrix[1][1] = START_SYMBOL
+matrix[int(REACH.split(",")[1])][int(REACH.split(",")[0])] = FINISH_SYMBOL
+
+os.system("cls")
+current_position = "1,1"
+while current_position != REACH:
+    time.sleep(0.2)
+    x = int(current_position.split(",")[0])
+    y = int(current_position.split(",")[1])
+    prev = matrix[y][x]
+    matrix[y][x] = "O"
+    current_position = previouses[current_position]
+    print_matrix()
+    matrix[y][x] = PATH_SYMBOL
+print_matrix(True)
