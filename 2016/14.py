@@ -1,8 +1,7 @@
-import hashlib
+import hashlib, os, sys
 
-PART = 2
 KEY_STRETCH = 2016
-SALT = "ngcjuoqr"
+SALT = "abc"
 
 def hash_string(s, stretch_val):
     md5 = hashlib.md5(s.encode()).hexdigest()
@@ -14,8 +13,16 @@ def hash_string(s, stretch_val):
 otps = 0
 potentials = {}
 index = 0
+
+def print_hash(hash):
+    sys.stdout.write(f"{hash}\r")
+
+
+os.system("cls")
+sys.stdout.write("--------------SOTP--------------\n")
 while True:
     hash = hash_string(f"{SALT}{index}", KEY_STRETCH)
+    print_hash(hash)
     for i in range(len(hash) - 4):
         fragment = hash[i : i + 5]
         if len(set(fragment)) == 1:
@@ -23,7 +30,11 @@ while True:
             for p in potentials:
                 if potentials[p]["pattern"][0] == fragment[0]:
                     otps += 1
-                    print(otps, p, potentials[p]["index"])
+                    itp = potentials[p]["index"]
+                    sys.stdout.write(f"{p} {itp}\n")
+                    if otps == 64:
+                        sys.stdout.write("-------------ENDKEY-------------\n")
+                        exit()
                     mark_to_pop.append(p)
             for p in mark_to_pop:
                 potentials.pop(p)
