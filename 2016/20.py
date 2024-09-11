@@ -2,6 +2,7 @@ import sys
 
 FILE_NAME = "2016/20.txt"
 FILE_LENGTH = 1029
+MAXVAL = 4294967296
 
 blacklists = []
 f = open(FILE_NAME)
@@ -9,7 +10,8 @@ for i in range(FILE_LENGTH):
     blacklists.append(list(map(int, f.readline().strip().split("-"))))
 
 lowest = 0
-while True:
+count = 0
+while lowest < MAXVAL:
     found = True
     for r in blacklists:
         if r[0] <= lowest and r[1] > lowest:
@@ -17,5 +19,6 @@ while True:
             found = False
             break
     if found:
-        break
-print(lowest)
+        count += 1
+        lowest += 1
+print(count)
