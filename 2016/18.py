@@ -1,5 +1,5 @@
 START_ROW = ".^^^.^.^^^.^.......^^.^^^^.^^^^..^^^^^.^.^^^..^^.^.^^..^.^..^^...^.^^.^^^...^^.^.^^^..^^^^.....^...."
-ROWS_TO_ASSESS = 40
+ROWS_TO_ASSESS = 400000
 ROW_LENGTH = len(START_ROW)
 
 def tell_tile(left, right):
@@ -10,7 +10,7 @@ def tell_tile(left, right):
 number_of_safes = 0
 current_row = START_ROW
 for row_number in range(ROWS_TO_ASSESS):
-    print(current_row)
+    print(current_row, row_number + 1)
     number_of_safes += current_row.count(".")
     new_row = ""
     for tile_number in range(ROW_LENGTH):
