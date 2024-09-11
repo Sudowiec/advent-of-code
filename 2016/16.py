@@ -1,5 +1,7 @@
+import sys, math
+
 INIT = "10001110011110000"
-DISK_SIZE = 272
+DISK_SIZE = 35651584
 
 def dragon_curve(inp):
     a = inp
