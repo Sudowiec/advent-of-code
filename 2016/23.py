@@ -1,5 +1,11 @@
+import sys, os
+
 FILE_NAME = "2016/23.txt"
 FILE_LENGTH = 26
+
+MOVE_UP = "\033[F"
+COL_RESET = "\033[0;0m"
+COL_GREEN = "\033[0;32m"
 
 instructions = []
 
@@ -13,6 +19,20 @@ for line_number in range(FILE_LENGTH):
             pass
     instructions.append(instruction)
 
+def print_instructions(index, cpu, last = False):
+    to_print = ""
+    for i in range(len(instructions)):
+        if i == index:
+            to_print += f"{COL_GREEN}> {' '.join(list(map(str, instructions[i])))}{COL_RESET}\n"
+        else:
+            to_print += f"  {' '.join(list(map(str, instructions[i])))}\n"
+    to_print += f"\n"
+    for i in cpu:
+        to_print += f"  [{i}]: {cpu[i]}{10 * ' '}\n"
+    if not last:
+        to_print += f"{MOVE_UP * (len(instructions) + 5)}"
+    sys.stdout.write(to_print)
+
 toggles = {
     "inc" : "dec",
     "dec" : "inc",
@@ -23,9 +43,9 @@ toggles = {
 
 cpu = {"a" : 7, "b" : 0, "c" : 0, "d" : 0}
 index = 0
+os.system("clear")
 while index < len(instructions):
-    print(instructions)
-    print(cpu)
+    print_instructions(index, cpu)
     current_instruction = instructions[index]
     if current_instruction[0] == "cpy":
         if type(current_instruction[1]) is int:
@@ -50,3 +70,5 @@ while index < len(instructions):
         if pos >= 0 and pos < len(instructions):
             instructions[pos][0] = toggles[instructions[pos][0]]
     index += 1
+
+print_instructions(index, cpu, True)
