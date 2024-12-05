@@ -1,17 +1,22 @@
 FILE_NAME = "2024/04.txt"
 FILE_LENGTH = 140
+PART = 2
 
 def print_matrix(matrix):
     for i in matrix:
         print("".join(i))
 
+def get_around(matrix, x, y):
+    around = []
+    around.extend(matrix[y - 1][x - 1 : x + 2])
+    around.extend(matrix[y + 1][x - 1 : x + 2])
+    around.append(matrix[y][x - 1])
+    around.append(matrix[y][x + 1])
+    return around
+
 CHECK_PATTERN = ["UL", "U", "UR", "DL", "D", "DR", "L", "R"]
 def check_for_m(matrix, x, y):
-    checklist = []
-    checklist.extend(matrix[y - 1][x - 1 : x + 2])
-    checklist.extend(matrix[y + 1][x - 1 : x + 2])
-    checklist.append(matrix[y][x - 1])
-    checklist.append(matrix[y][x + 1])
+    checklist = get_around(matrix, x, y)
     indices = [i for i, x in enumerate(checklist) if x == "M"]
     return [CHECK_PATTERN[i] for i in indices]
 
@@ -38,14 +43,23 @@ matrix.insert(0, ["#" for i in range(len(matrix[0]))])
 matrix.append(["#" for i in range(len(matrix[0]))])
 
 sum = 0
+to_print = []
+X_MAS_PATTERN = ["MSMS", "MMSS", "SMSM", "SSMM"]
 for y in range(len(matrix)):
     for x in range(len(matrix[0])):
-        if matrix[y][x] != "X":
-            continue
-        directions = check_for_m(matrix, x, y)
-        for direction in directions:
-            cx,cy = setup_changes_for_coords(direction)
-            if matrix[y + (cy * 2)][x + (cx * 2)] == "A":
-                if matrix[y + (cy * 3)][x + cx * 3] == "S":
-                    sum += 1
+        if PART == 1:
+            if matrix[y][x] != "X":
+                continue
+            directions = check_for_m(matrix, x, y)
+            for direction in directions:
+                cx,cy = setup_changes_for_coords(direction)
+                if matrix[y + (cy * 2)][x + (cx * 2)] == "A":
+                    if matrix[y + (cy * 3)][x + cx * 3] == "S":
+                        sum += 1
+        else:
+            if matrix[y][x] != "A":
+                continue
+            around = "".join([get_around(matrix, x, y)[i] for i in [0, 2, 3, 5]])
+            if around in X_MAS_PATTERN:
+                sum += 1
 print(sum)
