@@ -2,8 +2,15 @@ from collections import defaultdict
 
 FILE_NAME = "2024/05.txt"
 FILE_SIZE = 1374
+PART = 2
 
 rules = defaultdict(lambda : [])
+def compare(a, b):
+    if a in rules[b]:
+        return False
+    if b in rules[a]:
+        return True
+
 sets = []
 f = open(FILE_NAME, "r")
 for line_number in range(FILE_SIZE):
@@ -19,12 +26,23 @@ for s in sets:
     for i in range(len(s) - 1):
         first = s[i]
         second = s[i + 1]
-        if second in rules[first]:
+        result = compare(first, second)
+        if result:
             continue
-        if first in rules[second]:
+        else:
             proper = False
             break
-    if proper:
+    if proper and PART == 1:
+        sum += s[len(s) // 2]
+    elif not proper and PART == 2:
+        for n in range(len(s) - 1, 0, -1):
+            swapped = False  
+            for i in range(n):
+                if not compare(s[i], s[i + 1]):
+                    s[i], s[i + 1] = s[i + 1], s[i]
+                    swapped = True
+            if not swapped:
+                break
         sum += s[len(s) // 2]
 print(sum)
         
