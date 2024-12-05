@@ -1,10 +1,21 @@
+import sys, os, time
+
 FILE_NAME = "2024/04.txt"
 FILE_LENGTH = 140
 PART = 2
 
-def print_matrix(matrix):
-    for i in matrix:
-        print("".join(i))
+COL_RESET = "\033[0;0m"
+COL_GREY = "\033[2;37m"
+COL_GREEN = "\033[0;32m"
+CURSOR_UP = "\033[F"
+
+def print_matrix(matrix, fin = False):
+    to_print = f"{COL_GREY}"
+    for row in range(1, len(matrix) - 1):
+        to_print += ("".join(matrix[row][1:-1]) + "\n")
+    if not fin:
+        to_print += "".join([CURSOR_UP for i in range(len(matrix))])
+    sys.stdout.write(to_print)
 
 def get_around(matrix, x, y):
     around = []
@@ -42,6 +53,7 @@ for line_number in range(FILE_LENGTH):
 matrix.insert(0, ["#" for i in range(len(matrix[0]))])
 matrix.append(["#" for i in range(len(matrix[0]))])
 
+os.system("cls")
 sum = 0
 to_print = []
 X_MAS_PATTERN = ["MSMS", "MMSS", "SMSM", "SSMM"]
@@ -55,11 +67,20 @@ for y in range(len(matrix)):
                 cx,cy = setup_changes_for_coords(direction)
                 if matrix[y + (cy * 2)][x + (cx * 2)] == "A":
                     if matrix[y + (cy * 3)][x + cx * 3] == "S":
+                        for i in range(4):
+                            matrix[y + (cy * i)][x + (cx * i)] = f"{COL_GREEN}{matrix[y + (cy * i)][x + (cx * i)]}{COL_GREY}"
+                        print_matrix(matrix)
                         sum += 1
         else:
             if matrix[y][x] != "A":
                 continue
             around = "".join([get_around(matrix, x, y)[i] for i in [0, 2, 3, 5]])
             if around in X_MAS_PATTERN:
+                matrix[y][x] = f"{COL_GREEN}{matrix[y][x]}{COL_GREY}"
+                for cy in [-1, 1]:
+                    for cx in [-1, 1]:
+                        matrix[y + cy][x + cx] = f"{COL_GREEN}{matrix[y + cy][x + cx]}{COL_GREY}"
+                print_matrix(matrix)
                 sum += 1
-print(sum)
+print_matrix(matrix, True)
+print(f"{COL_RESET}SUM: {COL_GREEN}{sum}")
